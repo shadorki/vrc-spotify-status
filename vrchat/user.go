@@ -2,7 +2,7 @@ package vrchat
 
 import "time"
 
-type UserLoginResponseBody struct {
+type UserData struct {
 	ID                 string   `json:"id"`
 	Username           string   `json:"username"`
 	DisplayName        string   `json:"displayName"`
@@ -55,4 +55,8 @@ type UserLoginResponseBody struct {
 	OnlineFriends            []string  `json:"onlineFriends"`
 	ActiveFriends            []string  `json:"activeFriends"`
 	OfflineFriends           []string  `json:"offlineFriends"`
+}
+
+type UserLoginRequireTwoFactorAuthResponseBody struct {
+	RequiresTwoFactorAuth []string `json:"requiresTwoFactorAuth"`
 }

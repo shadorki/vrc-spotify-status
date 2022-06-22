@@ -2,65 +2,53 @@ package views
 
 import (
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/uzair-ashraf/vrc-spotify-status/vrchat"
 )
 
-var Logo = canvas.NewImageFromFile("./images/logo.png")
-
-func Login(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
+func TwoFactorAuth(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
 	Logo.SetMinSize(fyne.NewSize(305, 142))
+	twoFactorAuthEnabledMessage := widget.NewLabel("You have Two Factor Authentication Enabled")
 	errorMessage := widget.NewLabel("")
-	usernameEntry := widget.NewEntry()
-	passwordEntry := widget.NewPasswordEntry()
+	authCodeEntry := widget.NewPasswordEntry()
 	loading := widget.NewProgressBarInfinite()
 	loading.Hidden = true
 	form := widget.NewForm(
-		widget.NewFormItem("Username", usernameEntry),
-		widget.NewFormItem("Password", passwordEntry),
+		widget.NewFormItem("Auth Code", authCodeEntry),
 	)
-	form.SubmitText = "Login"
+	form.SubmitText = "Authenticate"
 	form.OnCancel = func() {
 		errorMessage.Text = ""
 		errorMessage.Refresh()
-		usernameEntry.Text = ""
-		passwordEntry.Text = ""
+		authCodeEntry.Text = ""
 		form.Refresh()
 	}
 	form.OnSubmit = func() {
-		if usernameEntry.Text == "" || passwordEntry.Text == "" {
+		if authCodeEntry.Text == "" {
 			return
 		}
 		errorMessage.Text = ""
 		loading.Hidden = false
 		form.Disable()
-		err := vrc.Login(usernameEntry.Text, passwordEntry.Text)
+		err := vrc.TwoFactorAuthenticate(authCodeEntry.Text)
 		if err != nil {
+			authCodeEntry.Text = ""
 			errorMessage.Text = err.Error()
 			errorMessage.Refresh()
 		} else {
-			if vrc.IsLoggedIn() {
-				if vrc.IsTwoFactorAuthEnabled() {
-					r.SetRoute(RouteTwoFactorAuth)
-				} else {
-					r.SetRoute(RouteHome)
-				}
-			}
+			r.SetRoute(RouteHome)
 		}
 		loading.Hidden = true
 		form.Enable()
 	}
-	usernameEntry.OnChanged = func(_ string) {
-		errorMessage.Text = ""
-	}
-	passwordEntry.OnChanged = func(_ string) {
+	authCodeEntry.OnChanged = func(_ string) {
 		errorMessage.Text = ""
 	}
 	return container.NewVBox(
 		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
+		container.NewHBox(layout.NewSpacer(), twoFactorAuthEnabledMessage, layout.NewSpacer()),
 		form,
 		loading,
 		container.NewHBox(layout.NewSpacer(), errorMessage, layout.NewSpacer()),

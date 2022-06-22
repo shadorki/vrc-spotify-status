@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"fyne.io/fyne/v2"
+	"github.com/uzair-ashraf/vrc-spotify-status/spotify"
 	"github.com/uzair-ashraf/vrc-spotify-status/vrchat"
 )
 
@@ -12,6 +13,7 @@ type routes int64
 const (
 	RouteLogin routes = iota
 	RouteTwoFactorAuth
+	RouteHome
 )
 
 type Router struct {
@@ -19,14 +21,16 @@ type Router struct {
 	window       fyne.Window
 	app          fyne.App
 	vrc          *vrchat.VRChat
+	spotify      *spotify.Spotify
 }
 
-func NewRouter(a fyne.App, w fyne.Window, vrc *vrchat.VRChat) *Router {
+func NewRouter(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, s *spotify.Spotify) *Router {
 	return &Router{
 		currentRoute: RouteLogin,
 		app:          a,
 		window:       w,
 		vrc:          vrc,
+		spotify:      s,
 	}
 }
 
@@ -35,6 +39,10 @@ func (r *Router) SetRoute(route routes) {
 	switch route {
 	case RouteLogin:
 		view = Login(r.app, r.window, r.vrc, r)
+	case RouteTwoFactorAuth:
+		view = TwoFactorAuth(r.app, r.window, r.vrc, r)
+	case RouteHome:
+		view = Home(r.app, r.window, r.vrc, r.spotify, r)
 	}
 	if view != nil {
 		r.window.SetContent(view)
