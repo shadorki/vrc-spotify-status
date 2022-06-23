@@ -10,8 +10,10 @@ import (
 	"strings"
 )
 
-const API_KEY = "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"
-const STATUS_DESCRIPTION_LIMIT = 31
+const (
+	API_KEY                  = "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"
+	STATUS_DESCRIPTION_LIMIT = 31
+)
 
 type VRChat struct {
 	cookie                 string
@@ -57,7 +59,6 @@ func (v *VRChat) Login(username, password string) error {
 	v.SetCookie(cookie)
 	var twoFactorData *UserLoginRequireTwoFactorAuthResponseBody
 	err = json.Unmarshal(body, &twoFactorData)
-	fmt.Println(string(body))
 	if err != nil {
 		return err
 	}
@@ -67,7 +68,6 @@ func (v *VRChat) Login(username, password string) error {
 	} else {
 		var userData *UserData
 		err = json.Unmarshal(body, &userData)
-		fmt.Println(string(body))
 		if err != nil {
 			return err
 		}
@@ -89,8 +89,6 @@ func (v *VRChat) TwoFactorAuthenticate(code string) error {
 	}
 	client := &http.Client{}
 	payload := fmt.Sprintf(`{"code":"%v"}`, code)
-	fmt.Println(code)
-	fmt.Println(payload)
 	data := strings.NewReader(payload)
 
 	req, err := http.NewRequest("POST", fmt.Sprintf("https://vrchat.com/api/1/auth/twofactorauth/totp/verify?apiKey=%v", API_KEY), data)
@@ -128,7 +126,6 @@ func (v *VRChat) TwoFactorAuthenticate(code string) error {
 	v.SetTwoFactorAuthCookie(cookie)
 	var res *TwoFactorAuthResponseBody
 	err = json.Unmarshal(body, &res)
-	fmt.Println(string(body))
 	if err != nil {
 		return err
 	}
@@ -187,7 +184,6 @@ func (v *VRChat) SetStatus(status string) error {
 	}
 	client := &http.Client{}
 	payload := fmt.Sprintf(`{"statusDescription":"%v"}`, status)
-	fmt.Println(payload)
 	data := strings.NewReader(payload)
 
 	req, err := http.NewRequest("PUT", fmt.Sprintf("https://vrchat.com/api/1/users/%v?apiKey=%v", v.user.ID, API_KEY), data)

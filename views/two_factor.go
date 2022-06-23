@@ -47,10 +47,12 @@ func TwoFactorAuth(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyn
 		errorMessage.Text = ""
 	}
 	return container.NewVBox(
+		layout.NewSpacer(),
 		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
 		container.NewHBox(layout.NewSpacer(), twoFactorAuthEnabledMessage, layout.NewSpacer()),
 		form,
 		loading,
 		container.NewHBox(layout.NewSpacer(), errorMessage, layout.NewSpacer()),
+		layout.NewSpacer(),
 	)
 }

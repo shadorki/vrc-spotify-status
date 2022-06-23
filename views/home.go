@@ -1,8 +1,6 @@
 package views
 
 import (
-	"fmt"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
@@ -16,7 +14,6 @@ func Home(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, s *spotify.Spotify, r *
 	currentSong := widget.NewLabel("")
 	btn := widget.NewButton("Start", func() {})
 	btn.OnTapped = func() {
-		fmt.Println("brr")
 		if s.IsRunning() {
 			btn.Text = "Start"
 			s.Stop()
@@ -27,11 +24,14 @@ func Home(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, s *spotify.Spotify, r *
 	}
 	s.Subscribe(func(nextSong string) {
 		currentSong.Text = nextSong
+		currentSong.Refresh()
 		vrc.SetStatus(nextSong)
 	})
 	return container.NewVBox(
+		layout.NewSpacer(),
 		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
 		container.NewHBox(layout.NewSpacer(), currentSong, layout.NewSpacer()),
 		container.NewHBox(layout.NewSpacer(), btn, layout.NewSpacer()),
+		layout.NewSpacer(),
 	)
 }

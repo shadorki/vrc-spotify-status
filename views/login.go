@@ -60,9 +60,11 @@ func Login(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.Canvas
 		errorMessage.Text = ""
 	}
 	return container.NewVBox(
+		layout.NewSpacer(),
 		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
 		form,
 		loading,
 		container.NewHBox(layout.NewSpacer(), errorMessage, layout.NewSpacer()),
+		layout.NewSpacer(),
 	)
 }

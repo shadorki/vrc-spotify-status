@@ -114,6 +114,7 @@ func (s *Spotify) getCurrentSpotifySong() (string, error) {
 			s := strings.Replace(l, "Spotify", "", 1)
 			s = strings.Trim(s, " ")
 			s = strings.Trim(s, "\n")
+			s = strings.TrimSpace(s)
 			if strings.HasPrefix(s, "Spotify Premium") {
 				continue
 			}
