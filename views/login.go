@@ -9,10 +9,7 @@ import (
 	"github.com/uzair-ashraf/vrc-spotify-status/vrchat"
 )
 
-var Logo = canvas.NewImageFromFile("./images/logo.png")
-
-func Login(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
-	Logo.SetMinSize(fyne.NewSize(305, 142))
+func Login(l *canvas.Image, a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
 	errorMessage := widget.NewLabel("")
 	usernameEntry := widget.NewEntry()
 	passwordEntry := widget.NewPasswordEntry()
@@ -61,7 +58,7 @@ func Login(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.Canvas
 	}
 	return container.NewVBox(
 		layout.NewSpacer(),
-		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
+		container.NewHBox(layout.NewSpacer(), l, layout.NewSpacer()),
 		form,
 		loading,
 		container.NewHBox(layout.NewSpacer(), errorMessage, layout.NewSpacer()),

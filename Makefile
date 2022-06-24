@@ -1,2 +1,2 @@
 build:
-	GOOS=windows GOARCH=386 go build -o bin/vrc-osc-spotify.exe main.go
+	GOOS=windows GOARCH=amd64 go build -o bin/vrc-spotify-status.exe main.go

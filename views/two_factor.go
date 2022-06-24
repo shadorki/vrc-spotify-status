@@ -2,14 +2,14 @@ package views
 
 import (
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/uzair-ashraf/vrc-spotify-status/vrchat"
 )
 
-func TwoFactorAuth(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
-	Logo.SetMinSize(fyne.NewSize(305, 142))
+func TwoFactorAuth(l *canvas.Image, a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyne.CanvasObject {
 	twoFactorAuthEnabledMessage := widget.NewLabel("You have Two Factor Authentication Enabled")
 	errorMessage := widget.NewLabel("")
 	authCodeEntry := widget.NewPasswordEntry()
@@ -48,7 +48,7 @@ func TwoFactorAuth(a fyne.App, w fyne.Window, vrc *vrchat.VRChat, r *Router) fyn
 	}
 	return container.NewVBox(
 		layout.NewSpacer(),
-		container.NewHBox(layout.NewSpacer(), Logo, layout.NewSpacer()),
+		container.NewHBox(layout.NewSpacer(), l, layout.NewSpacer()),
 		container.NewHBox(layout.NewSpacer(), twoFactorAuthEnabledMessage, layout.NewSpacer()),
 		form,
 		loading,
